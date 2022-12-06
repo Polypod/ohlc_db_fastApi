@@ -1,0 +1,6 @@
+pandas~=1.5.2
+numpy~=1.23.5
+fastapi~=0.88.0
+pytiingo~=0.0.1
+python-dotenv~=0.21.0
+SQLAlchemy~=1.4.44
