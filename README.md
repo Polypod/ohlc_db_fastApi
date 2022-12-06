@@ -2,7 +2,7 @@
 
 ### 1 : API that returns historical hourly Crypto OHLC Data
 
-    conda create --name technical-test python=3.7
+    conda create --name technical-test python=3.10
 
 Activate the conda virtual env:
 
@@ -19,24 +19,13 @@ Link for checking whether API is up: [localhost:8000](localhost:8000)
 Docs from Swagger UI will be available at: [localhost:8000/docs](localhost:8000/docs) 
 To get data of BTCUSDT symbol - Go to [localhost:8000/btc](localhost:8000/btc)
 
-##### ATTENTION:
-There will be a "KeyError: 0" in the console. It is due to the fact that I've made a workaround to get FastAPI work with Pandas. There's a [know issue](https://github.com/tiangolo/fastapi/issues/1733) with FastAPI, where it refuses to work with loaded jsons and its conversion to DataFrames. So I made a for loop to get around the same and converted values to "float" in order to avoid crashing the script due to some internal numpy int64 error. The log will show error like:
 
-    File "./main.py", line 21, in get_hourly_cryptodata
-        data[i] = list(map(float, data[i]))
-    KeyError: 0
-
-The api is fine and it works without any issues.
-
-
-
-#### Alternative to Conda envs:
+#### Docker:
 I've added a Dockerfile for the first task (Note: this is only usable for first task):
 
      sudo docker build -t api .
-Then run
 
-    sudo docker run --name api -p 8000:8000 api
+     sudo docker run --name api -p 8000:8000 api
 
 #### Screenshots:
 <br />
@@ -46,10 +35,9 @@ Then run
 
 ![Swagger UI - Docs](img/api-2.png)
 
-### 2 : Postgres table with 1 month of backfilled hourly data for BTC, ETH, and XRP (*backfill.py*)
+### 2 : Postgres table with 1 month of data for equity (*backfill.py*)
 
-Since the API is not deployed over aws, I'll be manually importing main.py to the backfill.py in order to call the API for fetching data.
-First, we will have to setup a PostgreSQL Database with preferred username and password:
+setup a PostgreSQL Database with preferred username and password:
 
     sudo -u postgres psql -c 'create database cryptodata;'
     sudo -u postgres bash -c "psql -c \"CREATE USER testuser WITH PASSWORD 'testpass'; GRANT ALL PRIVILEGES ON DATABASE cryptodata TO testuser;\""    
